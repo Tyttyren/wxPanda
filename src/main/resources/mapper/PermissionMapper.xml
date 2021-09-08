@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wman.mapper.PermissionMapper">
+
+    <resultMap id="roleMap" type="com.wman.entity.Permission">
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="permission"  property="permission"/>
+    </resultMap>
+
+    <!-- 根据角色id查询权限数据   -->
+    <select id="findByRoleId" resultMap="roleMap" parameterType="int">
+        select * from permission where id in (select permission_id from role_permission where role_id = #{roleId} )
+    </select>
+
+    <!-- 添加权限数据   -->
+    <insert id="insert" keyProperty="id" parameterType="com.wman.entity.Permission">
+        insert into premission(`name`, permission) values(#{name}, #{permission})
+    </insert>
+
+    <!--  更改权限信息  -->
+    <update id="update" parameterType="com.wman.entity.Permission">
+        update permission
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="permission != null">
+                permission = #{permission}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--  删除权限  -->
+    <delete id="delete" parameterType="int">
+        delete from premission where id = #{id}
+    </delete>
+
+</mapper>

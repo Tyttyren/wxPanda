@@ -1,0 +1,68 @@
+# 设置项目名称
+spring:
+  application:
+    name: wxpanda
+  # 配置日期格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  # 配置数据源
+  datasource:
+    # mysql用户名
+    username: root
+    # 密码
+    password: 123
+    # 链接地址 配置你数据库的url serverTimeZone=GMT%2B8 解决时区问题，也可以写为serverTimeZone=Asia/Shnaghai
+    url: jdbc:mysql://localhost:3306/wx_panda?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8
+    # mysql连接驱动 8以上需要写成com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
+    # 配置阿里数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 对象池配置
+    lettuce:
+      pool:
+        # 最大连接数
+        max-active: 1024
+        # 空闲最小连接数
+        min-idle: 5
+        # 最大等待时间
+        max-wait: 10000ms
+        # 空闲最大连接数
+        max-idle: 200
+
+# 配置端口号
+server:
+  port: 8080
+# 配置MyBatis扫描目录
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  # Mybatis扫描包
+  type-aliases-package: com.wman.entity
+  configuration:
+    # 是否开启驼峰转换
+    map-underscore-to-camel-case: true
+    # 控制台打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# jwt配置
+jwt:
+  # 请求头
+  tokenHeader: Authorization
+  # 签名加盐
+  secret: iwqjhda8232bjgh432
+  #JWT过期时间(60*60*24*7) 半个小时 7天
+  expiration: 604800
+  # token头部
+  tokenHead: 'Bearer '
+
+swagger2:
+  enable: true
+
+# 微信小程序
+wx:
+  appid: wx9c3c249594a50e9f
+  # secret: MGNiMzk1NDc2ODY0MDk1Y2U3OWZmN2VkNzY2YjFlNTE=  # 这是Base64加密的
+  secret: 0cb395476864095ce79ff7ed766b1e51
+  sp_mchid: 1317716401
+  sub_mchid: 1605020654
+  header_Authorization: WECHATPAY2-SHA256-RSA2048 mchid="1605020654",nonce_str="mcxo7fCMA1oft9wV46kPyWrT7BIzv0JY",
+  serial_no: 7068FAE9E99BA8900A48D962438C337909088196

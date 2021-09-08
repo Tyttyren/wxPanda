@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wman.mapper.WxMapper">
+    <resultMap id="mainMap" type="com.wman.entity.WxUser">
+        <id column="id" property="id"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="address" property="address"/>
+        <result column="gender" property="gender"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <collection select="selectRole" column="role" ofType="com.wman.entity.Role" property="role"/>
+<!--        <result column="role" property="role"/>-->
+    </resultMap>
+
+    <resultMap id="roleMap" type="com.wman.entity.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark"/>
+        <collection select="selectPermission" property="permissions" column="id" ofType="com.wman.entity.Permission"/>
+    </resultMap>
+
+    <select id="selectRole" parameterType="int" resultMap="roleMap">
+        select * from `role` where id = #{role}
+    </select>
+
+    <select id="selectPermission" parameterType="int" resultType="com.wman.entity.Permission">
+        select * from permission where id in (select permission_id from role_permission where role_id = #{id})
+    </select>
+
+    <select id="findAllUser" resultMap="mainMap">
+        select * from wx_user;
+    </select>
+
+    <select id="findByusername" resultMap="mainMap" parameterType="String">
+        select * from wx_user where openid = #{username}
+    </select>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into wx_user (openid, nick_name, address, gender, phone_number, avatar_url, `role`, create_time, update_time)
+        values (#{openid},#{nickName},#{address},#{gender},#{phoneNumber},#{avatarUrl},#{role},current_time,current_time )
+    </insert>
+
+    <update id="update">
+        update wx_panda
+        <set>
+            <if test="nickName != null and nickName.lenth>0">
+                nick_name = #{nickName},
+            </if>
+            <if test="address != null and address.lenth>0">
+                address = #{address},
+            </if>
+            <if test="gemder != null and nickName.lenth>0">
+                gender = #{gender},
+            </if>
+            <if test="phoneNumber != null and phoneNumber.lenth>0">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="avatarUrl != null and avatarUrl.lenth>0">
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where openid = #{openid}
+    </update>
+
+</mapper>

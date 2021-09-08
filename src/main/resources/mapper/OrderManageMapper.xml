@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wman.mapper.OrderManageMapper">
+    <select id="select" resultType="List">
+        select * from orderManage
+    </select>
+
+    <insert id="insert" parameterType="com.wman.mapper.OrderManageMapper">
+        insert into orderManage (openid,order_num) values (#{openID},#{orderNum})
+    </insert>
+
+    <select id="selectByOpenID" parameterType="java.lang.String" resultType="java.lang.String">
+        select order_num from orderManage where openid=#{openid}
+    </select>
+
+
+    <select id="selectOrder" parameterType="java.lang.String" resultType="java.lang.String">
+        select transaction_id from orderManage where order_num=#{orderNum}
+    </select>
+
+    <insert id="insertTransaction" parameterType="java.lang.String">
+        insert into orderManage (order_num,transaction_id) values (#{orderNum},#{transaction})
+    </insert>
+</mapper>
